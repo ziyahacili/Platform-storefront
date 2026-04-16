@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+'use client';
 
 export default function ShopPage() {
-  redirect('/shop/products');
+  return <div>Shop</div>;
 }
