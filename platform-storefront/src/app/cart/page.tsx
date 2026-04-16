@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cartAPI } from '@/lib/api/cart';
 import { formatPrice } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -20,11 +20,14 @@ export default function CartPage() {
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 30_000,
-    onSuccess: (data) => {
-      const ids = new Set((data?.items ?? []).map((i: any) => i.id as string));
-      setSelectedIds(ids);
-    },
   });
+
+  useEffect(() => {
+    if (cart) {
+      const ids = new Set((cart?.items ?? []).map((i: any) => i.id as string));
+      setSelectedIds(ids);
+    }
+  }, [cart]);
 
   const removeItem = useMutation({
     mutationFn: (cartItemId: string) => cartAPI.removeItem(cartItemId),
